@@ -1,0 +1,41 @@
+# coding : utf-8
+
+import csv, nltk, string
+
+crtc = "crtc-francais.csv"
+from nltk.tokenize import word_tokenize
+from nltk.stem import SnowballStemmer
+from nltk.corpus import stopwords
+from collections import Counter
+
+f = open(crtc)
+interventions = csv.reader(f)
+next(interventions)
+n = 0
+
+tousMots = []
+bigrams = []
+
+for inter in interventions:
+    #print(inter[14])
+    #print(token.text)
+    # tokens = [token.text for token in interventions if token.is_stop == False and token.is_punct == False]
+    # print(tokens)
+   
+    # tokens = word_tokenize(inter[14])
+
+
+
+    fr = SnowballStemmer("french")
+    racines = [fr.stem(mot) for mot in word_tokenize(inter[14]) if mot not in stopwords.words("french") and mot not in string.punctuation]
+    print(racines)
+
+    # for racine in racines:     
+    #     tousMots.append(racine)
+
+    for x, y in enumerate(racines[:-1]):
+        bigrams.append("{} {}".format(racines[x], racines[x+1]))
+    print(len(bigrams))
+
+freq = Counter(bigrams)
+print(freq.most_common(25))
